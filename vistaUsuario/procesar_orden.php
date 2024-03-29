@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['direccion'])) {
     $numero = $_POST['numero'];
     $email = $_POST['email'];
     $direccion = $_POST['direccion'];
+    $id_product = $_POST['id_product']; // Obtener ID de producto desde el formulario
 
     // Obtener los productos en el carrito (asumiendo que los IDs están en $_SESSION['carrito'])
     $productos_carrito = $_SESSION['carrito'];
@@ -31,17 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['direccion'])) {
         $nombres_productos[] = $producto['nombre_product']; // Agregar nombre del producto al array
     }
 
-    // Obtener el ID de la microempresa (id_mypime) de los productos (supongamos que tienes esta información)
-    $id_mypime = $_POST['id_mypime'];
-
     // Construir la cadena de nombres de los productos separados por comas
     $product_names = implode(", ", $nombres_productos);
 
-    // Insertar la orden en la base de datos del MyPIME
+    // Insertar la orden en la base de datos del cliente
     $cliente_id = $_SESSION['user_id'];
     $placed_on = date("Y-m-d H:i:s"); // Fecha actual
-    $query_insertar_orden = "INSERT INTO tbl_orders (user_id, name_user, number_user, email_user, method, address_user, total_products, total_price, placed_on, payment_status, id_mypime, product_names) 
-                             VALUES ('$cliente_id', '$nombre', '$numero', '$email', 'metodo_pago', '$direccion', '$total_productos', '$total', '$placed_on', 'pendiente', '$id_mypime', '$product_names')";
+    $query_insertar_orden = "INSERT INTO tbl_orders (user_id, name_user, number_user, email_user, method, address_user, total_products, total_price, placed_on, status, product_names, id_product) 
+                             VALUES ('$cliente_id', '$nombre', '$numero', '$email', 'metodo_pago', '$direccion', '$total_productos', '$total', '$placed_on', 'pendiente', '$product_names', '$id_product')";
 
     if (mysqli_query($conexion, $query_insertar_orden)) {
         // Obtener el ID de la orden recién insertada
@@ -61,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['direccion'])) {
         // Limpiar el carrito después de procesar la orden
         unset($_SESSION['carrito']);
 
-        // Aquí podrías enviar notificaciones al MyPIME sobre la nueva orden
+        // Aquí podrías enviar notificaciones al cliente sobre la nueva orden
 
         // Redirigir a una página de confirmación o a donde desees
         header("Location: ver_productos.php");
@@ -78,4 +76,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['direccion'])) {
 // Cerrar conexión
 mysqli_close($conexion);
 ?>
-

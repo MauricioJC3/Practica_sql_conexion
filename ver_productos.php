@@ -17,38 +17,75 @@ $id_mypime = $_SESSION['id_mypime'];
 $query = "SELECT * FROM tbl_products WHERE id_mypime = $id_mypime";
 $result = mysqli_query($conexion, $query);
 
-// Verificar si hay productos
-if (mysqli_num_rows($result) > 0) {
-    // Mostrar la lista de productos en una tabla
-    echo "<h1>Productos de MyPIME</h1>";
-    echo "<table border='1'>";
-    echo "<tr><th>ID Producto</th><th>Nombre Producto</th><th>Precio Producto</th><th>Descripción</th><th>Acciones</th></tr>";
-    
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>";
-        echo "<td>" . $row['id_product'] . "</td>";
-        echo "<td>" . $row['nombre_product'] . "</td>";
-        echo "<td>" . $row['price_product'] . "</td>";
-        echo "<td>" . $row['description'] . "</td>";
-        echo "<td><a href='editar_producto.php?id=" . $row['id_product'] . "'>Editar</a> | <a href='eliminar_producto.php?id=" . $row['id_product'] . "'>Eliminar</a></td>";
-        echo "</tr>";
-    }
-    
-    echo "</table>";
-} else {
-    echo "No hay productos disponibles.";
-}
-
 // Cerrar conexión
 mysqli_close($conexion);
-?>
 
+// Verificar si hay productos
+$productos = [];
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $productos[] = $row;
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Ver Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+        }
+        .product-actions {
+            margin-top: 5px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <h1>Productos de MyPIME</h1>
+    
+    <?php if (!empty($productos)): ?>
+        <?php foreach ($productos as $producto): ?>
+            <div class="product">
+                <div class="product-info">
+                    <strong>ID Producto:</strong> <?php echo $producto['id_product']; ?><br>
+                    <strong>Nombre Producto:</strong> <?php echo $producto['nombre_product']; ?><br>
+                    <strong>Precio Producto:</strong> <?php echo $producto['price_product']; ?><br>
+                </div>
+                <div class="product-actions">
+                    <a href="editar_producto.php?id=<?php echo $producto['id_product']; ?>">Editar</a> | 
+                    <a href="eliminar_producto.php?id=<?php echo $producto['id_product']; ?>">Eliminar</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No hay productos disponibles.</p>
+    <?php endif; ?>
+
     <p><a href="dashboard_mypime.php">Volver al Dashboard</a></p>
     <p><a href="logout.php">Cerrar Sesión</a></p>
 </body>

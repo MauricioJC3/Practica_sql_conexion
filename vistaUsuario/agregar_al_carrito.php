@@ -2,8 +2,10 @@
 // Incluir archivo de conexión
 include '../conexion.php';
 
-// Verificar si el cliente está autenticado
+// Iniciar sesión
 session_start();
+
+// Verificar si el cliente está autenticado y obtener su ID
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     // Si no está autenticado, redirigir al formulario de inicio de sesión
     header("Location: login_cliente.php");
@@ -21,14 +23,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     if (mysqli_num_rows($resultado_producto) == 1) {
         $producto = mysqli_fetch_assoc($resultado_producto);
 
-        // Agregar el producto al carrito
+        // Agregar el producto al carrito junto con el NIT del MyPIME asociado
         $nuevo_producto = [
             'id_cart' => $producto['id_product'], // Usamos el ID del producto como ID del carrito (puede ajustarse según necesites)
             'id_product' => $producto['id_product'],
             'nombre_product' => $producto['nombre_product'],
             'price_product' => $producto['price_product'],
             'quantity' => 1, // Cantidad inicial
-            'description' => $producto['description'] // Si necesitas la descripción en el carrito
+            'description' => $producto['description'], // Si necesitas la descripción en el carrito
+            'nit_mypime' => $producto['nit_mypime'] // Agregamos el NIT del MyPIME
         ];
 
         // Verificar si $_SESSION['carrito'] ya existe y es un array
