@@ -26,7 +26,7 @@ $result_pedidos = mysqli_query($conexion, $query_pedidos);
 if (mysqli_num_rows($result_pedidos) > 0) {
     // Si hay pedidos, mostrarlos en una tabla
     ?>
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
     <title>Historial de Pedidos</title>
@@ -76,27 +76,9 @@ if (mysqli_num_rows($result_pedidos) > 0) {
         .footer a:hover {
             text-decoration: underline;
         }
-
-
-        .card ul {
-            list-style-type: none;
-            padding: 0;
-            color: #333;
-        }
-        .card li {
-            margin-bottom: 5px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-        }
-        .card li:last-child {
-            border-bottom: none;
-        }
-
     </style>
 </head>
 <body>
-
-<?php include 'tommic/header.php'; ?>
 
 <h2>Historial de Pedidos</h2>
 <div class="container">

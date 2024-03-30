@@ -94,5 +94,5 @@
             <input type="submit" value="Iniciar Sesión">
         </form>
     </div>
-</body>
-</html>
+<html>
+

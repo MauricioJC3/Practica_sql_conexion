@@ -49,6 +49,7 @@ foreach ($productos_carrito as $producto) {
 
 // Ahora puedes mostrar los productos y el total en la página
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -178,5 +179,6 @@ foreach ($productos_carrito as $producto) {
             <p>Total: <?php echo $total; ?></p>
         </div>
     </div>
+
 </body>
 </html>

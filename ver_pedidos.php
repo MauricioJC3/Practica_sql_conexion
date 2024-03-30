@@ -42,7 +42,6 @@ $result_detalles = mysqli_query($conexion, $query_detalles);
 ?>
 
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <title>Pedidos Realizados</title>
@@ -76,11 +75,14 @@ $result_detalles = mysqli_query($conexion, $query_detalles);
         }
         button {
             padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         a {
             text-decoration: none;
@@ -132,7 +134,7 @@ $result_detalles = mysqli_query($conexion, $query_detalles);
                         <input type="hidden" name="order_id" value="<?php echo $detalle['id_order']; ?>">
                         <select name="new_status">
                             <option value="pendiente">Pendiente</option>
-                            <option value="en_proceso">En Proceso</option>
+                            <option value="en proceso">En Proceso</option>
                             <option value="completado">Completado</option>
                         </select>
                         <button type="submit">Cambiar Estado</button>
@@ -145,4 +147,3 @@ $result_detalles = mysqli_query($conexion, $query_detalles);
     <p><a href="dashboard_mypime.php">Volver al Dashboard</a></p>
 </body>
 </html>
-
