@@ -21,46 +21,92 @@ if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
 <head>
     <title>Ver Carrito</title>
     <style>
-        table {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .card {
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
             width: 100%;
-            border-collapse: collapse;
+            border-radius: 8px;
         }
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
+        .card h3 {
+            margin-top: 10px;
+            color: #333;
         }
-        th {
-            background-color: #f2f2f2;
+        .card p {
+            margin-top: 5px;
+            color: #666;
+        }
+        .remove-from-cart {
+            display: block;
+            width: 100%;
+            background-color: #dc3545;
+            color: #fff;
+            padding: 8px 0;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .remove-from-cart:hover {
+            background-color: #c82333;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
 <h2>Productos en el Carrito</h2>
-<table>
-  <tr>
-    <th>ID Producto</th>
-    <th>Nombre Producto</th>
-    <th>Precio Producto</th>
-    <th>Cantidad</th>
-    <th>Acciones</th>
-  </tr>
-  <?php
-    foreach ($productos_carrito as $producto) {
-        echo "<tr>";
-        echo "<td>" . $producto['id_product'] . "</td>";
-        echo "<td>" . $producto['nombre_product'] . "</td>";
-        echo "<td>" . $producto['price_product'] . "</td>";
-        echo "<td>" . $producto['quantity'] . "</td>";
-        echo "<td><a href='eliminar_del_carrito.php?id=" . $producto['id_cart'] . "'>Eliminar</a></td>";
-        echo "</tr>";
-    }
-  ?>
-</table>
+<div class="container">
+    <?php
+        foreach ($productos_carrito as $producto) {
+            echo "<div class='card'>";
+            echo "<h3>" . $producto['nombre_product'] . "</h3>";
+            echo "<p>$" . $producto['price_product'] . "</p>";
+            echo "<p>Cantidad: " . $producto['quantity'] . "</p>";
+            echo "<a class='remove-from-cart' href='eliminar_del_carrito.php?id=" . $producto['id_cart'] . "'>Eliminar del Carrito</a>";
+            echo "</div>";
+        }
+    ?>
+</div>
 
-<p><a href="ver_productos.php">Seguir Comprando</a></p>
-<br>
-<p><a href="finalizar_compra.php">Finalizar Compra</a></p>
+<div class="footer">
+    <p><a href="ver_productos.php">Seguir Comprando</a></p>
+    <p><a href="finalizar_compra.php">Finalizar Compra</a></p>
+</div>
 
 </body>
 </html>

@@ -23,62 +23,94 @@ $result = mysqli_query($conexion, $query);
 <head>
     <title>Ver Productos</title>
     <style>
-        table {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .card {
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
             width: 100%;
-            border-collapse: collapse;
+            border-radius: 8px;
         }
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
+        .card h3 {
+            margin-top: 10px;
+            color: #333;
         }
-        th {
-            background-color: #f2f2f2;
+        .card p {
+            margin-top: 5px;
+            color: #666;
         }
         .add-to-cart {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 0;
             text-align: center;
             text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
-        .add-to-cart.disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+        .add-to-cart:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
 <h2>Productos Disponibles</h2>
-<table>
-  <tr>
-    <th>ID Producto</th>
-    <th>Nombre Producto</th>
-    <th>Precio Producto</th>
-    <th>Descripción</th>
-    <th>Acciones</th>
-  </tr>
-  <?php
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>";
-        echo "<td>" . $row['id_product'] . "</td>";
-        echo "<td>" . $row['nombre_product'] . "</td>";
-        echo "<td>" . $row['price_product'] . "</td>";
-        echo "<td>" . $row['description'] . "</td>";
-        echo "<td>";
-        echo "<a class='add-to-cart' href='agregar_al_carrito.php?id=" . $row['id_product'] . "'>Agregar al Carrito</a>";
-        echo "</td>";
-        echo "</tr>";
-    }
-  ?>
-</table>
+<div class="container">
+    <?php
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<div class='card'>";
+            echo "<img src='imagen_producto.jpg' alt='Producto'>";
+            echo "<h3>" . $row['nombre_product'] . "</h3>";
+            echo "<p>$" . $row['price_product'] . "</p>";
+            echo "<p>" . $row['description'] . "</p>";
+            echo "<a class='add-to-cart' href='agregar_al_carrito.php?id=" . $row['id_product'] . "'>Agregar al Carrito</a>";
+            echo "</div>";
+        }
+    ?>
+</div>
 
-<p><a href="ver_carrito.php">Ver Carrito</a></p>
-<p><a href="logout_cliente.php">Cerrar Sesión</a></p>
+<div class="footer">
+    <p><a href="ver_carrito.php">Ver Carrito</a></p>
+    <p><a href="logout_cliente.php">Cerrar Sesión</a></p>
+    <p><a href="dashboard_cliente.php">Inicio</a></p>
+</div>
 
 </body>
 </html>

@@ -22,36 +22,80 @@ if (mysqli_num_rows($result_pedidos) > 0) {
     // Si hay pedidos, mostrarlos en una tabla
     ?>
     <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Historial de Pedidos</title>
-    </head>
-    <body>
-        <h2>Historial de Pedidos</h2>
-        <table border="1">
-            <tr>
-                <th>ID Pedido</th>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th>productos</th>
-                <th>estado</th>
-                <!-- Otros encabezados de columnas según tu estructura de pedido -->
-            </tr>
-            <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
-                <tr>
-                    <td><?php echo $pedido['id_order']; ?></td>
-                    <td><?php echo $pedido['placed_on']; ?></td>
-                    <td><?php echo $pedido['total_price']; ?></td>
-                    <td><?php echo $pedido['product_names']; ?></td>
-                    <td><?php echo $pedido['status']; ?></td>
-                    <!-- Otras columnas según tu estructura de pedido -->
-                </tr>
-            <?php } ?>
-        </table>
+<html>
+<head>
+    <title>Historial de Pedidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .card {
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .card p {
+            margin-top: 5px;
+            color: #666;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
 
-        <a href="dashboard_cliente.php">inicio</a>
-    </body>
-    </html>
+<h2>Historial de Pedidos</h2>
+<div class="container">
+    <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
+        <div class="card">
+            <h3>Pedido #<?php echo $pedido['id_order']; ?></h3>
+            <p>Fecha: <?php echo $pedido['placed_on']; ?></p>
+            <p>Total: $<?php echo $pedido['total_price']; ?></p>
+            <p>Productos: <?php echo $pedido['product_names']; ?></p>
+            <p>Total de Productos: <?php echo $pedido['total_products']; ?></p>
+            <p>Estado: <?php echo $pedido['status']; ?></p>
+        </div>
+    <?php } ?>
+</div>
+
+<div class="footer">
+    <p><a href="dashboard_cliente.php">Volver al Dashboard</a></p>
+</div>
+
+</body>
+</html>
+
     <?php
 } else {
     // Si no hay pedidos, mostrar un mensaje indicando que no hay pedidos realizados
