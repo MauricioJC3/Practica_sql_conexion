@@ -14,14 +14,19 @@ include '../conexion.php';
 $user_id = $_SESSION['user_id'];
 
 // Consulta para obtener los pedidos realizados por el usuario
-$query_pedidos = "SELECT * FROM tbl_orders WHERE user_id = $user_id";
+$query_pedidos = "SELECT o.placed_on, o.total_price, o.product_names, o.total_products, o.status,
+                         GROUP_CONCAT(od.quantity SEPARATOR ',') AS product_quantities
+                  FROM tbl_orders o
+                  LEFT JOIN tbl_order_details od ON o.id_order = od.id_order
+                  WHERE o.user_id = $user_id
+                  GROUP BY o.id_order";
 $result_pedidos = mysqli_query($conexion, $query_pedidos);
 
 // Verificar si hay pedidos
 if (mysqli_num_rows($result_pedidos) > 0) {
     // Si hay pedidos, mostrarlos en una tabla
     ?>
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Historial de Pedidos</title>
@@ -71,18 +76,49 @@ if (mysqli_num_rows($result_pedidos) > 0) {
         .footer a:hover {
             text-decoration: underline;
         }
+
+
+        .card ul {
+            list-style-type: none;
+            padding: 0;
+            color: #333;
+        }
+        .card li {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .card li:last-child {
+            border-bottom: none;
+        }
+
     </style>
 </head>
 <body>
+
+<?php include 'tommic/header.php'; ?>
 
 <h2>Historial de Pedidos</h2>
 <div class="container">
     <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
         <div class="card">
-            <h3>Pedido #<?php echo $pedido['id_order']; ?></h3>
-            <p>Fecha: <?php echo $pedido['placed_on']; ?></p>
+            <h3>Fecha: <?php echo $pedido['placed_on']; ?></h3>
             <p>Total: $<?php echo $pedido['total_price']; ?></p>
-            <p>Productos: <?php echo $pedido['product_names']; ?></p>
+            <?php
+                // Convertir la cadena de nombres de productos en un array
+                $productos = explode(',', $pedido['product_names']);
+                // Convertir la cadena de cantidades de productos en un array
+                $cantidades = explode(',', $pedido['product_quantities']);
+                
+                // Combinar los nombres de productos con sus respectivas cantidades
+                $productos_con_cantidad = array_combine($productos, $cantidades);
+            ?>
+            <p>Productos:</p>
+            <ul>
+                <?php foreach ($productos_con_cantidad as $producto => $cantidad) { ?>
+                    <li><?php echo $producto; ?> - Cantidad: <?php echo $cantidad; ?></li>
+                <?php } ?>
+            </ul>
             <p>Total de Productos: <?php echo $pedido['total_products']; ?></p>
             <p>Estado: <?php echo $pedido['status']; ?></p>
         </div>

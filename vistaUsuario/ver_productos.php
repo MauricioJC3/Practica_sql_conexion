@@ -91,6 +91,8 @@ $result = mysqli_query($conexion, $query);
 </head>
 <body>
 
+<?php include 'tommic/header.php'; ?>
+
 <h2>Productos Disponibles</h2>
 <div class="container">
     <?php
