@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Verificar si el usuario está autenticado y obtener el ID de MyPIME
+// Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_mypime']) || empty($_SESSION['id_mypime'])) {
     // Si no está autenticado, redirigir al formulario de inicio de sesión
     header("Location: login_mypime.html");
@@ -11,12 +11,28 @@ if (!isset($_SESSION['id_mypime']) || empty($_SESSION['id_mypime'])) {
 // Incluir archivo de conexión
 include 'conexion.php';
 
-// Obtener el ID de MyPIME de la sesión
+// Obtener el ID de la MyPIME de la sesión
 $id_mypime = $_SESSION['id_mypime'];
 
-// Consulta para obtener los productos asociados al ID de MyPIME
-$query = "SELECT * FROM tbl_products WHERE id_mypime = $id_mypime";
-$result = mysqli_query($conexion, $query);
+// Consulta para obtener los productos vendidos por la MyPIME actual y sus precios
+$queryProductosVendidos = "SELECT p.nombre_product, p.price_product, SUM(od.quantity) AS cantidad_vendida 
+                           FROM tbl_order_details od 
+                           INNER JOIN tbl_orders o ON od.id_order = o.id_order 
+                           INNER JOIN tbl_products p ON od.id_product = p.id_product 
+                           WHERE p.id_mypime = $id_mypime AND o.status = 'completado'
+                           GROUP BY od.id_product";
+
+$resultProductosVendidos = mysqli_query($conexion, $queryProductosVendidos);
+
+// Arrays para almacenar los nombres de los productos y el dinero generado
+$productos = [];
+$dineroGenerado = [];
+
+// Procesar los resultados y llenar los arrays
+while ($row = mysqli_fetch_assoc($resultProductosVendidos)) {
+    $productos[] = $row['nombre_product'];
+    $dineroGenerado[] = $row['price_product'] * $row['cantidad_vendida'];
+}
 
 // Cerrar conexión
 mysqli_close($conexion);
@@ -66,24 +82,66 @@ mysqli_close($conexion);
             margin-top: 20px;
         }
 
-
+        .grafica_de_barras {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <?php include 'tommic/header.php'; ?>
 
-    <div class="container">
-        <h1 class="move">Bienvenido, <?php echo $_SESSION['nombre_mypime']; ?>!</h1>
-        <p>Esta es tu página de dashboard.</p>
-        
-        <!-- Otro contenido del dashboard aquí -->
+<div class="container">
+    <h1 class="move">Bienvenido, <?php echo $_SESSION['nombre_mypime']; ?>!</h1>
+    <p>Esta es tu página de dashboard.</p>
 
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi fuga ipsa deserunt perspiciatis iste repellat, dicta esse reiciendis saepe, laboriosam, consequuntur dolore culpa odit ratione modi deleniti quam voluptate labore!
-        <br>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, asperiores consequuntur similique perspiciatis, sit magni hic amet doloremque deserunt expedita nisi et voluptas deleniti aliquid unde animi non eaque doloribus.
+    <!-- Agregar gráfica de barras aquí -->
+    <div class="grafica_de_barras">
+        <canvas id="graficaDineroGenerado" width="400" height="200"></canvas>
     </div>
 
+    <!-- Otro contenido del dashboard aquí -->
+    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi fuga ipsa deserunt perspiciatis iste repellat, dicta
+    esse reiciendis saepe, laboriosam, consequuntur dolore culpa odit ratione modi deleniti quam voluptate labore!
+    <br>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, asperiores consequuntur similique perspiciatis, sit
+    magni hic amet doloremque deserunt expedita nisi et voluptas deleniti aliquid unde animi non eaque doloribus.
+    <br>
+    <br>
+</div>
+
+<!-- Incluir la biblioteca Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Código JavaScript para configurar la gráfica
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctxDineroGenerado = document.getElementById('graficaDineroGenerado').getContext('2d');
+        var graficaDineroGenerado = new Chart(ctxDineroGenerado, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($productos); ?>,
+                datasets: [{
+                    label: 'Dinero Generado por Producto',
+                    data: <?php echo json_encode($dineroGenerado); ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
