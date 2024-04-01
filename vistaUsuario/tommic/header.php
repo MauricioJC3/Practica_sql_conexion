@@ -48,6 +48,7 @@
 <div class="navbar">
     <a href="ver_productos.php">Ver Productos</a>
     <a href="perfil_usuario.php">Perfil</a>
+    <a href="ver_carrito.php">Ver carrito</a>
     <a href="ver_pedidos_usuario.php">Ver Pedidos</a>
     <a href="logout_cliente.php">Cerrar Sesión</a>
 </div>

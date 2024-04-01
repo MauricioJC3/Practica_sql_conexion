@@ -87,6 +87,13 @@ $result = mysqli_query($conexion, $query);
         .footer a:hover {
             text-decoration: underline;
         }
+
+        .tamaño_imagen{
+            width: 300px; /* Ancho mínimo deseado */
+        max-width: 300px; /* Ancho máximo deseado */
+        height: 300px; /* Altura automática para mantener la proporción */
+        }
+
     </style>
 </head>
 <body>
@@ -96,15 +103,26 @@ $result = mysqli_query($conexion, $query);
 <h2>Productos Disponibles</h2>
 <div class="container">
     <?php
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<div class='card'>";
-            echo "<img src='imagen_producto.jpg' alt='Producto'>";
-            echo "<h3>" . $row['nombre_product'] . "</h3>";
-            echo "<p>$" . $row['price_product'] . "</p>";
-            echo "<p>" . $row['description'] . "</p>";
-            echo "<a class='add-to-cart' href='agregar_al_carrito.php?id=" . $row['id_product'] . "'>Agregar al Carrito</a>";
-            echo "</div>";
+    // Iterar sobre los resultados y mostrar los productos
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<div class='card'>";
+        // Verificar si hay una imagen para este producto
+        if (!empty($row['image'])) {
+            // Construir la URL de la imagen
+            $image_url = "../imagenes_productos/" . $row['image'];
+            // Mostrar la imagen
+            echo "<img src='$image_url' alt='Producto' class='tamaño_imagen'>";
+        } else {
+            // Si no hay imagen, mostrar una imagen de marcador de posición
+            echo "<img src='placeholder.jpg' alt='Producto'>";
         }
+        // Mostrar otros detalles del producto
+        echo "<h3>" . $row['nombre_product'] . "</h3>";
+        echo "<p>$" . $row['price_product'] . "</p>";
+        echo "<p>" . $row['description'] . "</p>";
+        echo "<a class='add-to-cart' href='agregar_al_carrito.php?id=" . $row['id_product'] . "'>Agregar al Carrito</a>";
+        echo "</div>";
+    }
     ?>
 </div>
 
