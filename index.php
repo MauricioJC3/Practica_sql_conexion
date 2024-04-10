@@ -82,7 +82,7 @@ $id_mypime = $_SESSION['id_mypime']; // Obtener el NIT de la MyPIME de la sesió
 <body>
 <h1>Ingrese un nuevo producto</h1>
     <form action="insert_producto.php" method="POST" enctype="multipart/form-data">
-        MyPIME NIT: <input type="text" name="id_mypime" value="<?php echo $id_mypime; ?>" readonly><br><br>
+        Mypime NIT: <input type="text" name="id_mypime" value="<?php echo $id_mypime; ?>" readonly><br><br>
         Nombre Producto: <input type="text" name="nombre_producto" required><br><br>
         Precio Producto: <input type="text" name="price_producto" required><br><br>
         Descripción: <textarea name="descripcion" rows="4" cols="50" required></textarea><br><br>
