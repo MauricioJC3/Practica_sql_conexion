@@ -236,12 +236,12 @@ CREATE TABLE `tbl_products` (
 
 INSERT INTO `tbl_products` (`id_product`, `id_mypime`, `nombre_product`, `price_product`, `description`, `status`, `image`) VALUES
 (1, 987654321, 'carpiol', 5000.00, 'sea muy bueno', 'disponible', NULL),
-(2, 123456789, 'lipertus', 10000.00, 'es para la gripe', 'disponible', NULL),
-(3, 123456789, 'calamardo p', 30000.00, 'bob porque lo hiciste', 'disponible', NULL),
+(2, 123456789, 'lipertus', 10000.00, 'es para la gripe', 'disponible', 'slam.jpg'),
+(3, 123456789, 'calamardo p', 30000.00, 'bob porque lo hiciste r', 'disponible', 'berserk.png'),
 (4, 987654321, 'polinomio', 50000.00, 'polinomio perfecto al cuadrado', 'disponible', NULL),
-(5, 123456789, 'hamburguesa', 8000.00, 'hamburguesa con salsas de francia', 'disponible', NULL),
-(6, 123456789, 'lechoina', 30000.00, 'dasdsdasds', 'disponible', 'gatito-cosmico.png'),
-(9, 123456789, 'afinaito', 1000000.00, 'champeta criolla', 'disponible', 'Andres_Mauricio_Jimenez_Chavez_CC_1052966921_O+.png');
+(5, 123456789, 'hamburguesa', 8000.00, 'hamburguesa con salsas de francia', 'disponible', 'o_no_viejo.png'),
+(6, 123456789, 'maconco', 30000.00, 'si a bueno', 'disponible', 'code.jpg'),
+(9, 123456789, 'afinaito', 1000000.00, 'champeta criolla', 'disponible', 'initial.jpg');
 
 --
 -- Disparadores `tbl_products`
