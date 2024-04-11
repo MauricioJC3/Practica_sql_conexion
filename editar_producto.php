@@ -81,7 +81,7 @@
 
             // Formulario para editar el producto
             echo "<h1>Editar Producto</h1>";
-            echo "<form action='actualizar_producto.php' method='POST'>";
+            echo "<form action='actualizar_producto.php' method='POST' enctype='multipart/form-data'>";
             echo "<label for='id_producto'>ID Producto:</label>";
             echo "<input type='text' name='id_producto' value='" . $row['id_product'] . "' readonly>";
             echo "<label for='nombre_producto'>Nombre Producto:</label>";
@@ -90,8 +90,10 @@
             echo "<input type='text' name='precio_producto' value='" . $row['price_product'] . "'>";
             echo "<label for='descripcion'>Descripción:</label>";
             echo "<textarea name='descripcion'>" . $row['description'] . "</textarea>";
+            echo "<label for='imagen'>Imagen:</label>";
+            echo "<input type='file' name='imagen'>";
             echo "<input type='submit' value='Actualizar Producto'>";
-            echo "</form>";
+            echo "</form>";            
         } else {
             echo "No se encontró el producto.";
         }
