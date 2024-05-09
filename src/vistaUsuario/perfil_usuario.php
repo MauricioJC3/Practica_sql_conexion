@@ -132,7 +132,7 @@ mysqli_close($conexion);
             <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
             <p><?php echo isset($fecha_nacimiento) ? $fecha_nacimiento : ''; ?></p>
         </div>
-        <a href="editar_perfil.php" class="btn-edit-profile">Editar Perfil</a>
+        <a href="editar_Informacion_Usuario.php" class="btn-edit-profile">Editar Perfil</a>
     </div>
 </body>
 </html>
