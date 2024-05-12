@@ -1,182 +1,266 @@
 <?php
+include '../conexion.php';
+
 session_start();
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
-    // Si no está autenticado, redirigir al formulario de inicio de sesión
-    header("Location: login_cliente.php");
-    exit();
+
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+if (!isset($user_id)) {
+   header('location:login.php');
 }
 
-// Incluir archivo de conexión
-include '../conexion.php'; // Asegúrate de reemplazar 'conexion.php' con el nombre de tu archivo de conexión
+if (isset($_POST['order_btn'])) {
 
-// Obtener el ID de usuario de la sesión
-$user_id = $_SESSION['user_id'];
+   $name = mysqli_real_escape_string($conexion, $_POST['name']);
+   $number = $_POST['number'];
+   $email = mysqli_real_escape_string($conexion, $_POST['email']);
+   $method = mysqli_real_escape_string($conexion, $_POST['method']);
+   $address = mysqli_real_escape_string($conexion, $_POST['address']);
+   $placed_on = date('d-M-Y');
 
-// Consulta SQL para obtener los datos del usuario
-$query = "SELECT * FROM tbl_cliente WHERE user_id = $user_id"; // Utiliza el nombre correcto de la tabla
-$resultado = mysqli_query($conexion, $query);
-
-// Verificar si se encontraron resultados
-if ($resultado && mysqli_num_rows($resultado) > 0) {
-    // Obtener los datos del usuario
-    $row = mysqli_fetch_assoc($resultado);
-    // Almacenar los datos del usuario en las variables de sesión
-    $_SESSION['user_name'] = $row['nombre_cli']; // Utiliza el nombre correcto de la columna
-    $_SESSION['user_lastname'] = $row['apellidos_cli']; // Utiliza el nombre correcto de la columna
-    $_SESSION['user_email'] = $row['correo_cli']; // Utiliza el nombre correcto de la columna
-    $_SESSION['user_phone'] = $row['telefono_cli']; // Utiliza el nombre correcto de la columna
-} else {
-    // Manejar el caso en que no se encuentren datos del usuario
-    echo "Error: No se encontraron datos del usuario.";
-    exit();
+   $cart_total = 0;
+   $cart_total_quantity = 0; // Inicializa la variable para almacenar el total de productos en el carrito
+   
+   $cart_products = array();
+   $cart_details = array(); // Almacena los detalles de la orden
+   
+   $cart_query = mysqli_query($conexion, "SELECT * FROM `tbl_cart` WHERE user_id = '$user_id'") or die('query failed');
+   if (mysqli_num_rows($cart_query) > 0) {
+       while ($cart_item = mysqli_fetch_assoc($cart_query)) {
+           $cart_products[] = "{$cart_item['name_products']} ({$cart_item['quantity']})";
+           $sub_total = $cart_item['price_product'] * $cart_item['quantity'];
+           $cart_total += $sub_total;
+           $cart_total_quantity += $cart_item['quantity']; // Suma las cantidades de todos los productos en el carrito
+           
+           // Guarda los detalles de la orden
+           $cart_details[] = array(
+               'id_product' => $cart_item['id_product'],
+               'unit_price' => $cart_item['price_product'],
+               'quantity' => $cart_item['quantity']
+           );
+       }
+   }
+   
+   $total_products = implode(', ', $cart_products);
+   
+   $order_query = mysqli_query($conexion, "SELECT * FROM `tbl_orders` WHERE name_user = '$name' AND number_user = '$number' AND email_user = '$email' AND method = '$method' AND address_user = '$address' AND total_products = '$cart_total_quantity' AND total_price = '$cart_total'") or die('query failed');
+   
+   if ($cart_total == 0) {
+       $message[] = 'your cart is empty';
+   } else {
+       if (mysqli_num_rows($order_query) > 0) {
+           $message[] = 'order already placed!';
+       } else {
+           // Inserta la orden en tbl_orders
+           mysqli_query($conexion, "INSERT INTO `tbl_orders`(user_id, name_user, number_user, email_user, method, address_user, total_products, total_price, placed_on, product_names) VALUES('$user_id', '$name', '$number', '$email', '$method', '$address', '$cart_total_quantity', '$cart_total', '$placed_on', '$total_products')") or die('query failed');
+           
+           // Obtiene el ID de la orden recién insertada
+           $id_order = mysqli_insert_id($conexion);
+           
+           // Inserta los detalles de la orden en tbl_order_details
+           foreach ($cart_details as $detail) {
+               $id_product = $detail['id_product'];
+               $unit_price = $detail['unit_price'];
+               $quantity = $detail['quantity'];
+               mysqli_query($conexion, "INSERT INTO `tbl_order_details`(id_order, id_product, unit_price, quantity) VALUES('$id_order', '$id_product', '$unit_price', '$quantity')") or die('query failed');
+           }
+           
+           $message[] = 'order placed successfully!';
+           
+           // Elimina los productos del carrito
+           mysqli_query($conexion, "DELETE FROM `tbl_cart` WHERE user_id = '$user_id'") or die('query failed');
+       }
+   }
 }
-
-// Verificar si la variable de sesión 'carrito' está definida y es un array
-if (!isset($_SESSION['carrito']) || !is_array($_SESSION['carrito'])) {
-    // Si no hay productos en el carrito, redirigir al usuario a la página de productos
-    header("Location: ver_productos.php");
-    exit();
-}
-
-// Obtener los productos en el carrito
-$productos_carrito = $_SESSION['carrito'];
-
-// Calcular el total de la compra
-$total = 0;
-foreach ($productos_carrito as $producto) {
-    $total += $producto['price_product'] * $producto['quantity'];
-}
-
-// Ahora puedes mostrar los productos y el total en la página
 ?>
+
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizar Compra</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .summary {
-            flex: 1;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            margin-left: 20px;
-        }
-        .summary h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-        .summary ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .summary ul li {
-            margin-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .form-container {
-            flex: 1;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .form-container h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        label {
-            font-size: 16px;
-            color: #555;
-        }
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Checkout</title>
+   <!-- Font Awesome CDN link -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <!-- Custom CSS file link -->
+   <link rel="stylesheet" href="css/style3.css">
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+         background-color: #f3f4f6;
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+      .heading {
+         background-color: #333;
+         color: #fff;
+         padding: 10px;
+         text-align: center;
+      }
+
+      .heading h3 {
+         margin: 0;
+         padding: 0;
+      }
+
+      .heading p {
+         margin: 5px 0 0;
+         padding: 0;
+      }
+
+      .display-order {
+         background-color: #fff;
+         padding: 20px;
+         margin-top: 20px;
+      }
+
+      .display-order .empty {
+         color: #ff0000;
+      }
+
+      .display-order .grand-total {
+         font-weight: bold;
+         margin-top: 10px;
+      }
+
+      .checkout {
+         background-color: #fff;
+         padding: 20px;
+         margin-top: 20px;
+      }
+
+      .checkout h3 {
+         margin-bottom: 20px;
+      }
+
+      .checkout .flex {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 20px;
+      }
+
+      .inputBox {
+         flex: 1 1 250px;
+      }
+
+      .inputBox span {
+         font-weight: bold;
+         display: block;
+         margin-bottom: 5px;
+      }
+
+      .inputBox input[type="text"],
+      .inputBox input[type="number"],
+      .inputBox input[type="email"],
+      .inputBox select {
+         width: 100%;
+         padding: 10px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         outline: none;
+      }
+
+      .inputBox input[type="submit"] {
+         background-color: #333;
+         color: #fff;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 16px;
+      }
+
+      .inputBox input[type="submit"]:hover {
+         background-color: #555;
+      }
+
+      .fother {
+         background-color: #333;
+         color: #fff;
+         text-align: center;
+         padding: 10px;
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+      }
+   </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="form-container">
-            <h2>Finalizar Compra</h2>
-            <form action="procesar_orden.php" method="POST">
-                <?php if (!empty($productos_carrito)): ?>
-                    <input type="hidden" name="id_product" value="<?php echo $productos_carrito[0]['id_product']; ?>">
-                <?php endif; ?>
 
-                <input type="hidden" name="nit_mypime" value="<?php echo $nit_mypime; ?>">
+   <?php include 'tommic/header.php'; ?>
 
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" value="<?php echo $_SESSION['user_name'] . ' ' . $_SESSION['user_lastname']; ?>" required>
+   <div class="heading">
+      <h3>Proceso</h3>
+      <p> <a href="index.php">Inicio</a> / Proceso </p>
+   </div>
 
-                <label for="numero">Número de Teléfono:</label>
-                <input type="text" id="numero" name="numero" value="<?php echo $_SESSION['user_phone']; ?>" required>
+   <section class="display-order">
 
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" value="<?php echo $_SESSION['user_email']; ?>" required>
+      <?php
+      $grand_total = 0;
+      $select_cart = mysqli_query($conexion, "SELECT * FROM `tbl_cart` WHERE user_id = '$user_id'") or die('query failed');
+      if (mysqli_num_rows($select_cart) > 0) {
+         while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+            $total_price = $fetch_cart['price_product'] * $fetch_cart['quantity'];
+            $grand_total += $total_price;
+      ?>
+            <p> <?php echo $fetch_cart['name_products']; ?> <span>(<?php echo '$' . $fetch_cart['price_product'] . '/-' . ' x ' . $fetch_cart['quantity']; ?>)</span> </p>
+      <?php
+         }
+      } else {
+         echo '<p class="empty">Your cart is empty</p>';
+      }
+      ?>
+      <div class="grand-total">Total Price: <span>$<?php echo $grand_total; ?>/-</span> </div>
 
-                <label for="direccion">Dirección de Envío:</label>
-                <textarea id="direccion" name="direccion" required></textarea>
+   </section>
 
-                <input type="submit" value="Finalizar Compra">
-            </form>
-        </div>
-        <div class="summary">
-            <h2>Resumen de la Compra</h2>
-            <ul>
-                <?php foreach ($productos_carrito as $producto): ?>
-                    <li>
-                        <?php echo $producto['nombre_product']; ?> -
-                        <?php echo $producto['price_product']; ?> -
-                        Cantidad: <?php echo $producto['quantity']; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-            <p>Total: <?php echo $total; ?></p>
-        </div>
-    </div>
+   <section class="checkout">
+
+      <form action="" method="post">
+         <h3>Make Your Order</h3>
+         <div class="flex">
+            <div class="inputBox">
+               <span>Nombre y apellido :</span>
+               <input type="text" name="name" required placeholder="Ingrese su nombre">
+            </div>
+            <div class="inputBox">
+               <span>Teléfono :</span>
+               <input type="number" name="number" required placeholder="Ingrese su teléfono">
+            </div>
+            <div class="inputBox">
+               <span>Correo :</span>
+               <input type="email" name="email" required placeholder="Ingrese su correo">
+            </div>
+            <div class="inputBox">
+               <span>Método de Pago:</span>
+               <select name="method">
+                  <option value="cash on delivery">Contra entrega</option>
+                  <option value="credit card">Tarjeta de crédito</option>
+                  <option value="paypal">Paypal</option>
+                  <option value="paytm">Paytm</option>
+               </select>
+            </div>
+            <div class="inputBox">
+               <span>Dirección :</span>
+               <input type="text" name="address" required placeholder="Ingrese la dirección">
+            </div>
+         </div>
+         <input type="submit" value="Realizar Ordenar" class="btn" name="order_btn">
+      </form>
+
+   </section>
+
+   <div class="fother">
+      
+   </div>
+<?php include 'tommic/fother.php'; ?>
 </body>
+
 </html>

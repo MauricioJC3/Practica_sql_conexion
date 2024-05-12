@@ -38,7 +38,19 @@ $query_detalles = "SELECT d.id_order, d.id_product, SUM(d.quantity) as cantidad,
                    INNER JOIN tbl_products p ON d.id_product = p.id_product 
                    WHERE p.id_mypime = $id_mypime
                    GROUP BY d.id_product, d.id_order";
+
+
+
+// Ejecutar la consulta
 $result_detalles = mysqli_query($conexion, $query_detalles);
+
+// Verificar si la consulta fue exitosa
+if (!$result_detalles) {
+    // Mostrar mensaje de error
+    echo "Error al obtener los detalles de los productos: " . mysqli_error($conexion);
+    // Detener la ejecución del script
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
