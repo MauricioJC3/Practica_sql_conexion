@@ -195,10 +195,6 @@ if (isset($_POST['order_btn'])) {
 
    <?php include 'tommic/header.php'; ?>
 
-   <div class="heading">
-      <h3>Proceso</h3>
-      <p> <a href="index.php">Inicio</a> / Proceso </p>
-   </div>
 
    <section class="display-order">
 
