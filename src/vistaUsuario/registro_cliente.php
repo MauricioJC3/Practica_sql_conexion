@@ -60,7 +60,7 @@
                     <label for="fecha_nac_cli" class="text-gray-500">Fecha de nacimiento</label>
                     <input class="rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="date" id="fecha_nac_cli" name="fecha_nac_cli" autocomplete="off" placeholder="Fecha de nacimiento" required>
                 </div>
-                <button class="bg-primary border border-primary-light text-white whitespace-nowrap grid place-items-center mt-5 leading-9 text-base font-medium cursor-pointer w-full rounded-lg shadow-md bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" type="submit">
+                <button  id="boton_registrarse" class="bg-primary border border-primary-light text-white whitespace-nowrap grid place-items-center mt-5 leading-9 text-base font-medium cursor-pointer w-full rounded-lg shadow-md bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" type="submit">
                     Registrarse
                 </button>
             </form>
@@ -71,5 +71,8 @@
   </div>
 </aside>
     </div>
+
+    <script src="../js/Validaciones/registerUsuario.js"></script>
+
 </body>
 </html>
