@@ -6,7 +6,7 @@ session_start();
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
 if (!isset($user_id)) {
-   header('location:login.php');
+   header('location:login_cliente.php');
 }
 
 if (isset($_POST['order_btn'])) {
@@ -237,10 +237,8 @@ if (isset($_POST['order_btn'])) {
             <div class="inputBox">
                <span>Método de Pago:</span>
                <select name="method">
-                  <option value="cash on delivery">Contra entrega</option>
-                  <option value="credit card">Tarjeta de crédito</option>
-                  <option value="paypal">Paypal</option>
-                  <option value="paytm">Paytm</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="Transferencia">Transferencia</option>
                </select>
             </div>
             <div class="inputBox">

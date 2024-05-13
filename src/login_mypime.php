@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_mypime = mysqli_real_escape_string($conexion, $_POST['password_mypime']);
 
         // Consulta para verificar las credenciales en la tabla tbl_mypimes
-        $query = "SELECT * FROM tbl_mypimes WHERE user_mypime = '$user_mypime' AND password_mypime = '$password_mypime'";
+        $query = "SELECT * FROM tbl_mypimes WHERE user_mypime = '$user_mypime' AND password_mypime = '$password_mypime' AND status = 'activo'";
 
         $resultado = mysqli_query($conexion, $query);
 
@@ -25,12 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nombre_mypime'] = $row['name_mypime'];
 
             // Redireccionar al dashboard o alguna otra página
-            header("Location: dashboard_mypime.php"); // Ruta actualizada
+            header("Location: dashboard_mypime.php");
             exit();
         } else {
             // Credenciales inválidas, redirigir al formulario de inicio de sesión con mensaje de error
-            $_SESSION['error_login'] = "Usuario o contraseña incorrectos.";
-            header("Location: login_mypime.html"); // Ruta actualizada
+            $_SESSION['error_login'] = "Usuario o contraseña incorrectos o la mypime está desactivada.";
+            header("Location: login_mypime.html");
             exit();
         }
 
@@ -39,12 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Campos no enviados, redirigir al formulario de inicio de sesión con mensaje de error
         $_SESSION['error_login'] = "Por favor, complete todos los campos.";
-        header("Location: login_mypime.html"); // Ruta actualizada
+        header("Location: login_mypime.html");
         exit();
     }
 } else {
     // Redirigir al formulario de inicio de sesión si se intenta acceder directamente al script
-    header("Location: login_mypime.html"); // Ruta actualizada
+    header("Location: login_mypime.html");
     exit();
 }
+
 ?>
