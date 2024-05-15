@@ -60,13 +60,13 @@ if (isset($_GET['delete_all'])) {
                   <a href="cart.php?delete=<?php echo $fetch_cart['id_cart']; ?>" class="absolute top-2 right-2 text-red-500 hover:text-red-600"><i class="fas fa-times"></i></a>
                   <img src="data:image/jpeg;base64,<?= base64_encode($fetch_cart['image']); ?>" alt="" class="w-full h-auto">
                   <div class="name font-bold text-lg mt-2"><?php echo $fetch_cart['nombre_product']; ?></div>
-                  <div class="price text-gray-700">$<?php echo $fetch_cart['price_product']; ?>/-</div>
+                  <div class="price text-gray-700">$<?php echo $fetch_cart['price_product']; ?></div>
                   <form action="" method="post" class="mt-2">
                      <input type="hidden" name="cart_id" value="<?php echo $fetch_cart['id_cart']; ?>">
                      <input type="number" min="1" name="cart_quantity" value="<?php echo $fetch_cart['quantity']; ?>" class="w-20 border border-gray-300 rounded-md px-2 py-1">
-                     <input type="submit" name="update_cart" value="Update" class="option-btn mt-2 block w-full bg-blue-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-blue-600 cursor-pointer">
+                     <input type="submit" name="update_cart" value="Actualizar" class="option-btn mt-2 block w-full bg-blue-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-blue-600 cursor-pointer">
                   </form>
-                  <div class="sub-total text-gray-500 mt-2">Subtotal: <span>$<?php echo $sub_total = ($fetch_cart['quantity'] * $fetch_cart['price_product']); ?>/-</span> </div>
+                  <div class="sub-total text-gray-500 mt-2">Subtotal: <span>$<?php echo $sub_total = ($fetch_cart['quantity'] * $fetch_cart['price_product']); ?></span> </div>
                </div>
          <?php
                $grand_total += $sub_total;
@@ -78,11 +78,11 @@ if (isset($_GET['delete_all'])) {
       </div>
 
       <div class="mt-8 text-center">
-         <a href="ver_carrito.php?delete_all" class="delete-btn <?php echo ($grand_total > 1) ? '' : 'disabled'; ?> bg-red-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-red-600 cursor-pointer" onclick="return confirm('Delete all from cart?');">Delete All</a>
+         <a href="ver_carrito.php?delete_all" class="delete-btn <?php echo ($grand_total > 1) ? '' : 'disabled'; ?> bg-red-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-red-600 cursor-pointer" onclick="return confirm('¿Esta seguro de eliminar todo lo que esta en el carrito?');">Borrar todo</a>
       </div>
 
       <div class="cart-total mt-8">
-         <p class="font-bold">Grand Total: <span class="text-xl">$<?php echo $grand_total; ?>/-</span></p>
+         <p class="font-bold">Grand Total: <span class="text-xl">$<?php echo $grand_total; ?></span></p>
          <div class="flex justify-center mt-4">
             <a href="ver_productos.php" class="option-btn bg-blue-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-blue-600 cursor-pointer">Continuar comprando</a>
             <a href="finalizar_compra.php" class="btn <?php echo ($grand_total > 1) ? '' : 'disabled'; ?> option-btn bg-blue-500 text-white font-bold rounded-md py-2 px-4 transition duration-300 hover:bg-blue-600 cursor-pointer">finalizar compra</a>

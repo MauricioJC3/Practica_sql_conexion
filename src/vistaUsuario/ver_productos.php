@@ -40,7 +40,7 @@ if (isset($_POST['add_to_cart']) && $user_id !== null) {
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>shop</title>
+   <title>Productos</title>
 
    <link rel="stylesheet" href="../css/output.css">
 </head>
@@ -67,14 +67,14 @@ if (isset($_POST['add_to_cart']) && $user_id !== null) {
             <form action="" method="post" class="box">
                <img class="image rounded-md w-96 h-80" src="<?php echo $image_path; ?>" alt="">
                <div class="name mt-2 text-lg font-semibold text-gray-700"><?php echo $fetch_products['nombre_product']; ?></div>
-               <div class="price text-gray-600">$<?php echo $fetch_products['price_product']; ?>/-</div>
+               <div class="price text-gray-600">$<?php echo $fetch_products['price_product']; ?></div>
                <?php if ($user_id !== null) { ?>
                   <input type="number" min="1" name="product_quantity" value="1" class="qty mt-2">
                   <input type="hidden" name="product_name" value="<?php echo $fetch_products['nombre_product']; ?>">
                   <input type="hidden" name="product_price" value="<?php echo $fetch_products['price_product']; ?>">
                   <input type="hidden" name="product_image" value="<?php echo $image_path; ?>">
                   <input type="hidden" name="product_id" value="<?php echo $fetch_products['id_product']; ?>">
-                  <input type="submit" value="add to cart" name="add_to_cart" class="btn mt-2 block w-full py-2 px-4 bg-blue-500 text-white text-center rounded-md transition duration-300 ease-in-out hover:bg-blue-600">
+                  <input type="submit" value="Agregar al carrito" name="add_to_cart" class="btn mt-2 block w-full py-2 px-4 bg-blue-500 text-white text-center rounded-md transition duration-300 ease-in-out hover:bg-blue-600">
                <?php } else { ?>
                   <p class="mt-2 text-center">Inicia sesión para agregar productos al carrito.</p>
                <?php } ?>

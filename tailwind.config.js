@@ -9,7 +9,7 @@ module.exports = {
         'fondo': 'url("../img/fondoo.jpg")',
         'iconu': 'url("../img/usuario.png")',
         'iconp': 'url("../img/contraseña.png")',
-
+        'fondom': 'url("../img/fondomy.png")',
       },
     },
   },
