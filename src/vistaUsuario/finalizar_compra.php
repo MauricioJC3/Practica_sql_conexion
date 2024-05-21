@@ -83,178 +83,69 @@ if (isset($_POST['order_btn'])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Checkout</title>
-   <!-- Font Awesome CDN link -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <!-- Custom CSS file link -->
-   <link rel="stylesheet" href="css/style3.css">
-   <style>
-      body {
-         font-family: Arial, sans-serif;
-         background-color: #f3f4f6;
-         margin: 0;
-         padding: 0;
-         box-sizing: border-box;
-      }
-
-      .heading {
-         background-color: #333;
-         color: #fff;
-         padding: 10px;
-         text-align: center;
-      }
-
-      .heading h3 {
-         margin: 0;
-         padding: 0;
-      }
-
-      .heading p {
-         margin: 5px 0 0;
-         padding: 0;
-      }
-
-      .display-order {
-         background-color: #fff;
-         padding: 20px;
-         margin-top: 20px;
-      }
-
-      .display-order .empty {
-         color: #ff0000;
-      }
-
-      .display-order .grand-total {
-         font-weight: bold;
-         margin-top: 10px;
-      }
-
-      .checkout {
-         background-color: #fff;
-         padding: 20px;
-         margin-top: 20px;
-      }
-
-      .checkout h3 {
-         margin-bottom: 20px;
-      }
-
-      .checkout .flex {
-         display: flex;
-         flex-wrap: wrap;
-         gap: 20px;
-      }
-
-      .inputBox {
-         flex: 1 1 250px;
-      }
-
-      .inputBox span {
-         font-weight: bold;
-         display: block;
-         margin-bottom: 5px;
-      }
-
-      .inputBox input[type="text"],
-      .inputBox input[type="number"],
-      .inputBox input[type="email"],
-      .inputBox select {
-         width: 100%;
-         padding: 10px;
-         border: 1px solid #ccc;
-         border-radius: 5px;
-         outline: none;
-      }
-
-      .inputBox input[type="submit"] {
-         background-color: #333;
-         color: #fff;
-         border: none;
-         padding: 10px 20px;
-         border-radius: 5px;
-         cursor: pointer;
-         font-size: 16px;
-      }
-
-      .inputBox input[type="submit"]:hover {
-         background-color: #555;
-      }
-
-      .fother {
-         background-color: #333;
-         color: #fff;
-         text-align: center;
-         padding: 10px;
-         position: fixed;
-         bottom: 0;
-         width: 100%;
-      }
-   </style>
+   <link rel="stylesheet" href="../css/output.css">
 </head>
 
-<body>
+<body class="bg-gray-100">
 
    <?php include 'tommic/header.php'; ?>
 
+   <div class="flex justify-between mb-6 max-w-4xl mx-auto px-6 py-4 bg-white rounded-lg shadow-xl mt-8">
+      <section class="w-1/2">
+         <h2 class="text-lg font-semibold mb-4">Total de Productos en el Carrito</h2>
 
-   <section class="display-order">
-
-      <?php
-      $grand_total = 0;
-      $select_cart = mysqli_query($conexion, "SELECT * FROM `tbl_cart` WHERE user_id = '$user_id'") or die('query failed');
-      if (mysqli_num_rows($select_cart) > 0) {
-         while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
-            $total_price = $fetch_cart['price_product'] * $fetch_cart['quantity'];
-            $grand_total += $total_price;
-      ?>
-            <p> <?php echo $fetch_cart['name_products']; ?> <span>(<?php echo '$' . $fetch_cart['price_product'] . '/-' . ' x ' . $fetch_cart['quantity']; ?>)</span> </p>
-      <?php
+         <?php
+         $grand_total = 0;
+         $select_cart = mysqli_query($conexion, "SELECT * FROM `tbl_cart` WHERE user_id = '$user_id'") or die('query failed');
+         if (mysqli_num_rows($select_cart) > 0) {
+            while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+               $total_price = $fetch_cart['price_product'] * $fetch_cart['quantity'];
+               $grand_total += $total_price;
+         ?>
+               <p class="mb-2 ml-3"><?php echo $fetch_cart['name_products']; ?> <span class="text-gray-500 text-center ml-2">(<?php echo '$' . $fetch_cart['price_product'] . '/-' . ' x ' . $fetch_cart['quantity']; ?>)</span></p>
+         <?php
+            }
+         } else {
+            echo '<p class="empty">El carrito está vacío</p>';
          }
-      } else {
-         echo '<p class="empty">Your cart is empty</p>';
-      }
-      ?>
-      <div class="grand-total">Total Price: <span>$<?php echo $grand_total; ?>/-</span> </div>
+         ?>
+         <div class="font-bold mt-4">Total: <span class="text-xl text-green-600">$<?php echo $grand_total; ?></span></div>
+      </section>
 
-   </section>
-
-   <section class="checkout">
-
-      <form action="" method="post">
-         <h3>Make Your Order</h3>
-         <div class="flex">
-            <div class="inputBox">
-               <span>Nombre y apellido :</span>
-               <input type="text" name="name" required placeholder="Ingrese su nombre">
+      <section class="w-1/2 p-2">
+         <h2 class="text-lg font-semibold mb-4">Realizar Orden</h2>
+         <form action="" method="post" class="space-y-4">
+            <div class="flex flex-col">
+               <label for="name" class="font-semibold"></label>
+               <input type="text" name="name" id="name" class="input-box rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Nombre y Apellido">
             </div>
-            <div class="inputBox">
-               <span>Teléfono :</span>
-               <input type="number" name="number" required placeholder="Ingrese su teléfono">
+            <div class="flex flex-col">
+               <label for="number" class="font-semibold"></label>
+               <input type="number" name="number" id="number" class="input-box rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Telefono">
             </div>
-            <div class="inputBox">
-               <span>Correo :</span>
-               <input type="email" name="email" required placeholder="Ingrese su correo">
+            <div class="flex flex-col">
+               <label for="email" class="font-semibold"></label>
+               <input type="email" name="email" id="email" class="input-box rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Correo">
             </div>
-            <div class="inputBox">
-               <span>Método de Pago:</span>
-               <select name="method">
+            <div class="flex flex-col">
+               <label for="method" class="font-semibold">Método de Pago:</label>
+               <select name="method" id="method" class="input-box rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                   <option value="Efectivo">Efectivo</option>
                   <option value="Transferencia">Transferencia</option>
                </select>
             </div>
-            <div class="inputBox">
-               <span>Dirección :</span>
-               <input type="text" name="address" required placeholder="Ingrese la dirección">
+            <div class="flex flex-col">
+               <label for="address" class="font-semibold"></label>
+               <input type="text" name="address" id="address" class="input-box rounded-b-xl border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Direccion">
             </div>
-         </div>
-         <input type="submit" value="Realizar Ordenar" class="btn" name="order_btn">
-      </form>
-
-   </section>
-
-   <div class="fother">
-      
+            <input type="submit" value="Realizar Orden" class="btn mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md cursor-pointer" name="order_btn">
+         </form>
+      </section>
    </div>
-<?php include 'tommic/fother.php'; ?>
+
+   <?php include 'tommic/fother.php'; ?>
+
 </body>
 
 </html>
+

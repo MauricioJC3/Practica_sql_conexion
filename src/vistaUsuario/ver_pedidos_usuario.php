@@ -22,103 +22,70 @@ $query_pedidos = "SELECT o.placed_on, o.total_price, o.product_names, o.total_pr
                   GROUP BY o.id_order";
 $result_pedidos = mysqli_query($conexion, $query_pedidos);
 
-// Verificar si hay pedidos
-if (mysqli_num_rows($result_pedidos) > 0) {
-    // Si hay pedidos, mostrarlos en una tabla
-    ?>
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Historial de Pedidos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
-        h2 {
-            text-align: center;
-            margin-top: 20px;
-            color: #333;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .card {
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin: 10px;
-            padding: 10px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .card p {
-            margin-top: 5px;
-            color: #666;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-<?php include 'tommic/header.php'; ?>
-<br>
-<h2>Historial de Pedidos</h2>
-<div class="container">
-    <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
-        <div class="card">
-            <h3>Fecha: <?php echo $pedido['placed_on']; ?></h3>
-            <p>Total: $<?php echo $pedido['total_price']; ?></p>
-            <?php
-                // Convertir la cadena de nombres de productos en un array
-                $productos = explode(',', $pedido['product_names']);
-                // Convertir la cadena de cantidades de productos en un array
-                $cantidades = explode(',', $pedido['product_quantities']);
-                
-                // Combinar los nombres de productos con sus respectivas cantidades
-                $productos_con_cantidad = array_combine($productos, $cantidades);
-            ?>
-            <p>Productos:</p>
-            <ul>
-                <?php foreach ($productos_con_cantidad as $producto => $cantidad) { ?>
-                    <li><?php echo $producto; ?> - Cantidad: <?php echo $cantidad; ?></li>
-                <?php } ?>
-            </ul>
-            <p>Total de Productos: <?php echo $pedido['total_products']; ?></p>
-            <p>Estado: <?php echo $pedido['status']; ?></p>
-        </div>
-    <?php } ?>
-</div>
-<br>
-<br>
-<br>
-<br>
-
-<?php include 'tommic/fother.php'; ?>
-</body>
-</html>
-
-    <?php
-} else {
-    // Si no hay pedidos, mostrar un mensaje indicando que no hay pedidos realizados
-    echo "No hay pedidos realizados.";
-}
 ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Historial de Pedidos</title>
+        <link rel="stylesheet" href="../css/output.css">
+    </head>
+    <body class="font-sans bg-gray-100">
+        <?php include 'tommic/header.php'; ?>
+        <br>
+        <h2 class="text-center text-2xl mt-8 mb-4">Historial de Pedidos</h2>
+        <div class="container mx-auto flex flex-wrap justify-center">
+            <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
+                <div class="card bg-white border border-gray-300 rounded-lg shadow-lg m-4 p-6 w-80 transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <h3 class="text-lg font-semibold text-indigo-600">Fecha: <?php echo $pedido['placed_on']; ?></h3>
+                    <p class="text-gray-600">Total: $<?php echo $pedido['total_price']; ?></p>
+                    <?php
+                    // Convertir la cadena de nombres de productos en un array
+                    $productos = explode(',', $pedido['product_names']);
+                    // Convertir la cadena de cantidades de productos en un array
+                    $cantidades = explode(',', $pedido['product_quantities']);
+                    
+                    // Verificar que ambos arrays tengan la misma longitud
+                    if (count($productos) === count($cantidades)) {
+                        // Combinar los nombres de productos con sus respectivas cantidades
+                        $productos_con_cantidad = array_combine($productos, $cantidades);
+                    } else {
+                        $productos_con_cantidad = [];
+                        echo "<p class='text-red-500'>Error: Los arrays de productos y cantidades no coinciden.</p>";
+                    }
+                    ?>
+                    <p class="mt-2 font-semibold">Productos:</p>
+                    <ul class="list-disc list-inside">
+                        <?php foreach ($productos_con_cantidad as $producto => $cantidad) { ?>
+                            <li><?php echo htmlspecialchars($producto); ?> - Cantidad: <?php echo htmlspecialchars($cantidad); ?></li>
+                        <?php } ?>
+                    </ul>
+                    <p class="mt-2">Total de Productos: <?php echo htmlspecialchars($pedido['total_products']); ?></p>
+                    <p class="mt-2">Estado: <span class="estado-label px-2 py-1 rounded"><?php echo htmlspecialchars($pedido['status']); ?></span></p>
+                </div>
+            <?php } ?>
+        </div>
+        <br>
+        <br>
+        <?php include 'tommic/fother.php'; ?>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const estados = document.querySelectorAll('.estado-label');
+                estados.forEach(function (estado) {
+                    const estadoTexto = estado.textContent.trim().toLowerCase();
+                    switch (estadoTexto) {
+                        case 'completado':
+                            estado.classList.add('bg-green-200', 'text-green-800');
+                            break;
+                        case 'pendiente':
+                            estado.classList.add('bg-red-200', 'text-yellow-800');
+                            break;
+                        case 'en proceso':
+                            estado.classList.add('bg-yellow-200', 'text-yellow-800');
+                            break;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

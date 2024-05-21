@@ -5,6 +5,10 @@
 
 @layer components{
 
+    .imagen-producto-zoom:hover {
+        @apply transform scale-110;
+      }
+      
     .contenedor{
         @apply w-[90%] mx-auto overflow-hidden max-w-screen-xl;
     }

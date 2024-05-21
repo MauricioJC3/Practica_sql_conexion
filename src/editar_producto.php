@@ -4,66 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Producto</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        input[type="text"],
-        textarea {
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/output.css">
 </head>
-<body>
-
-<div class="container">
+<body class="bg-gray-100">
+<div class="container mx-auto mt-8">
     <?php
     // Incluir archivo de conexión
     include 'conexion.php';
@@ -80,25 +24,34 @@
             $row = mysqli_fetch_assoc($result);
 
             // Formulario para editar el producto
-            echo "<h1>Editar Producto</h1>";
-            echo "<form action='actualizar_producto.php' method='POST' enctype='multipart/form-data'>";
-            echo "<label for='id_producto'>ID Producto:</label>";
-            echo "<input type='text' name='id_producto' value='" . $row['id_product'] . "' readonly>";
-            echo "<label for='nombre_producto'>Nombre Producto:</label>";
-            echo "<input type='text' name='nombre_producto' value='" . $row['nombre_product'] . "'>";
-            echo "<label for='precio_producto'>Precio Producto:</label>";
-            echo "<input type='text' name='precio_producto' value='" . $row['price_product'] . "'>";
-            echo "<label for='descripcion'>Descripción:</label>";
-            echo "<textarea name='descripcion'>" . $row['description'] . "</textarea>";
-            echo "<label for='imagen'>Imagen:</label>";
-            echo "<input type='file' name='imagen'>";
-            echo "<input type='submit' value='Actualizar Producto'>";
-            echo "</form>";            
+            ?>
+            <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+                <h1 class="text-3xl font-bold text-center mb-8">Editar Producto</h1>
+                <form action="actualizar_producto.php" method="POST" enctype="multipart/form-data">
+                    <label class="block mb-2 font-semibold" for="id_producto">ID Producto:</label>
+                    <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="text" name="id_producto" value="<?php echo $row['id_product']; ?>" readonly>
+                    
+                    <label class="block mt-2 font-semibold" for="nombre_producto">Nombre Producto:</label>
+                    <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="text" name="nombre_producto" value="<?php echo $row['nombre_product']; ?>">
+
+                    <label class="block mb-2 mt-2 font-semibold" for="precio_producto">Precio Producto:</label>
+                    <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="text" name="precio_producto" value="<?php echo $row['price_product']; ?>">
+
+                    <label class="block mb-2 mt-2 font-semibold" for="descripcion">Descripción:</label>
+                    <textarea class="w-full px-3 py-2 mb-4 border border-gray-300 rounded" name="descripcion" rows="4"><?php echo $row['description']; ?></textarea>
+
+                    <label class="block mb-2 font-semibold" for="imagen">Imagen:</label>
+                    <input class="w-full px-3 py-2 mb-4 border-none border-gray-300 rounded" type="file" name="imagen">
+
+                    <input class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer" type="submit" value="Actualizar Producto">
+                </form>
+            </div>
+            <?php         
         } else {
-            echo "No se encontró el producto.";
+            echo "<p class='text-center text-red-500'>No se encontró el producto.</p>";
         }
     } else {
-        echo "ID de producto no proporcionado.";
+        echo "<p class='text-center text-red-500'>ID de producto no proporcionado.</p>";
     }
 
     // Cerrar conexión

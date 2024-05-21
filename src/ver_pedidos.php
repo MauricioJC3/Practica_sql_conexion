@@ -54,106 +54,63 @@ if (!$result_detalles) {
 ?>
 
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos Realizados</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        form {
-            display: inline-block;
-        }
-        select {
-            margin-right: 10px;
-        }
-        button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .pendiente {
-            color: red;
-        }
-        .en_proceso {
-            color: blue;
-        }
-        .completado {
-            color: green;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/output.css">
 </head>
-<body>
-    <h1>Pedidos Realizados por tu MyPIME</h1>
-    <table border="1">
-        <tr>
-            <th>ID Pedido</th>
-            <th>Nombre Cliente</th>
-            <th>Dirección</th>
-            <th>Total Productos</th>
-            <th>Total Precio</th>
-            <th>Fecha Pedido</th>
-            <th>Estado</th>
-            <th>Detalles Productos / Cambiar Estado</th>
-        </tr>
-        <?php while ($detalle = mysqli_fetch_assoc($result_detalles)) { ?>
-            <tr>
-                <td><?php echo $detalle['id_order']; ?></td>
-                <td><?php echo $detalle['name_user']; ?></td>
-                <td><?php echo $detalle['address_user']; ?></td>
-                <td><?php echo $detalle['cantidad']; ?></td>
-                <td><?php echo $detalle['total_price']; ?></td>
-                <td><?php echo $detalle['placed_on']; ?></td>
-                <td class="<?php echo strtolower($detalle['status']); ?>"><?php echo $detalle['status']; ?></td>
-                <td>
-                    <?php
-                    // Mostrar detalles del producto
-                    echo "Producto: " . $detalle['nombre_product'] . " - Cantidad: " . $detalle['cantidad'] . "<br>";
-                    // Agregar formulario para cambiar el estado del pedido
-                    ?>
-                    <form method="post"> <!-- Eliminado action -->
-                        <input type="hidden" name="order_id" value="<?php echo $detalle['id_order']; ?>">
-                        <select name="new_status">
-                            <option value="pendiente">Pendiente</option>
-                            <option value="en_proceso">En Proceso</option>
-                            <option value="completado">Completado</option>
-                        </select>
-                        <button type="submit">Cambiar Estado</button>
-                    </form>
-                </td>
-            </tr>
-        <?php } ?>
-    </table>
-    <br>
-    <p><a href="dashboard_mypime.php">Volver al Dashboard</a></p>
+<body class="bg-gray-100">
+<?php include 'tommic/header.php'; ?>
+    <h1 class="text-center text-3xl font-bold mt-8">Pedidos Realizados</h1>
+    <div class="contenedor overflow-x-auto mx-auto mt-8">
+        <table class="table-auto w-full">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">ID Pedido</th>
+                    <th class="px-4 py-2">Nombre Cliente</th>
+                    <th class="px-4 py-2">Dirección</th>
+                    <th class="px-4 py-2">Total Productos</th>
+                    <th class="px-4 py-2">Total Precio</th>
+                    <th class="px-4 py-2">Fecha Pedido</th>
+                    <th class="px-4 py-2">Estado</th>
+                    <th class="px-4 py-2">Detalles Productos / Cambiar Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($detalle = mysqli_fetch_assoc($result_detalles)) { ?>
+                    <tr>
+                        <td class="border px-4 py-2"><?php echo $detalle['id_order']; ?></td>
+                        <td class="border px-4 py-2"><?php echo $detalle['name_user']; ?></td>
+                        <td class="border px-4 py-2"><?php echo $detalle['address_user']; ?></td>
+                        <td class="border px-4 py-2"><?php echo $detalle['cantidad']; ?></td>
+                        <td class="border px-4 py-2"><?php echo $detalle['total_price']; ?></td>
+                        <td class="border px-4 py-2"><?php echo $detalle['placed_on']; ?></td>
+                        <td class="border px-4 py-2 <?php echo strtolower($detalle['status']); ?>"><?php echo $detalle['status']; ?></td>
+                        <td class="border px-4 py-2">
+                            <?php
+                            // Mostrar detalles del producto
+                            echo "Producto: " . $detalle['nombre_product'] . " - Cantidad: " . $detalle['cantidad'] . "<br>";
+                            // Agregar formulario para cambiar el estado del pedido
+                            ?>
+                            <form method="post"> <!-- Eliminado action -->
+                                <input type="hidden" name="order_id" value="<?php echo $detalle['id_order']; ?>">
+                                <select name="new_status" class="border rounded px-2 py-1">
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="En proceso">En Proceso</option>
+                                    <option value="Completado">Completado</option>
+                                </select>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded ml-2">Cambiar Estado</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-8 text-center">
+        <a href="dashboard_mypime.php" class="text-blue-500 hover:underline">Volver al Dashboard</a>
+    </div>
 </body>
 </html>

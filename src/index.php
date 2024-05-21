@@ -14,81 +14,32 @@ $id_mypime = $_SESSION['id_mypime']; // Obtener el NIT de la MyPIME de la sesió
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Formulario para Ingresar Productos</title>
+    <title>Ingresar Productos</title>
+    <link rel="stylesheet" href="./css/output.css">
 </head>
 
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<?php include 'tommic/header.php'; ?>
 
-        h1 {
-            text-align: center;
-            margin-top: 30px;
-            color: #333;
-        }
+<body class="bg-gray-100">
+    <h1 class="text-3xl font-bold text-center mt-10 text-gray-800">Ingrese un nuevo producto</h1>
+    <form action="insert_producto.php" method="POST" enctype="multipart/form-data" class="max-w-lg mx-auto bg-white p-8 mt-6 rounded-lg shadow-md">
+        <label class="block text-gray-700" for="id_mypime">Mypime NIT:</label>
+        <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Correo electronico" type="text" name="id_mypime" value="<?php echo $id_mypime; ?>" readonly>
 
-        form {
-            width: 50%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+        <label class="block mt-2 text-gray-700" for="nombre_producto">Nombre Producto:</label>
+        <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="text" name="nombre_producto" required>
 
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+        <label class="block mt-2 text-gray-700" for="price_producto">Precio Producto:</label>
+        <input class="rounded-b-xl w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="text" name="price_producto" required>
 
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        <label class="block mt-2 text-gray-700" for="descripcion">Descripción:</label>
+        <textarea class="w-full px-4 py-2 mb-4 border border-gray-300 rounded" name="descripcion" rows="4" required></textarea>
 
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+        <label class="block mb-2 text-gray-700" for="imagen_producto">Imagen del Producto:</label>
+        <input class="rounded-b-xl mt-2 w-full border-b border-gray-300 px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" type="file" name="imagen_producto" accept="image/*" required>
 
-        a {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            color: #333;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</style>
-<body>
-<h1>Ingrese un nuevo producto</h1>
-    <form action="insert_producto.php" method="POST" enctype="multipart/form-data">
-        Mypime NIT: <input type="text" name="id_mypime" value="<?php echo $id_mypime; ?>" readonly><br><br>
-        Nombre Producto: <input type="text" name="nombre_producto" required><br><br>
-        Precio Producto: <input type="text" name="price_producto" required><br><br>
-        Descripción: <textarea name="descripcion" rows="4" cols="50" required></textarea><br><br>
-        Imagen del Producto: <input type="file" name="imagen_producto" accept="image/*" required><br><br>
-        <input type="submit" value="Agregar Producto">
+        <input class="w-full rounded bg-orange-500 text-white py-2 px-4 hover:bg-orange-600 cursor-pointer" type="submit" value="Agregar Producto">
     </form>
-    <a href="dashboard_mypime.php">volver a inicio</a>
+    <a class="block text-center mt-4 text-gray-700 hover:underline" href="dashboard_mypime.php">Volver a inicio</a>
 </body>
 </html>

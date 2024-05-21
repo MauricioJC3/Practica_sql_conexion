@@ -33,60 +33,39 @@ if (mysqli_num_rows($result) > 0) {
 <html>
 <head>
     <title>Ver Productos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .product {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #fff;
-        }
-        .product-info {
-            display: flex;
-            justify-content: space-between;
-        }
-        .product-actions {
-            margin-top: 5px;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/output.css">
 </head>
-<body>
-    <h1>Productos de MyPIME</h1>
-    
-    <?php if (!empty($productos)): ?>
-        <?php foreach ($productos as $producto): ?>
-            <div class="product">
-                <div class="product-info">
-                    <strong>ID Producto:</strong> <?php echo $producto['id_product']; ?><br>
-                    <strong>Nombre Producto:</strong> <?php echo $producto['nombre_product']; ?><br>
-                    <strong>Precio Producto:</strong> <?php echo $producto['price_product']; ?><br>
-                </div>
-                <div class="product-actions">
-                    <a href="editar_producto.php?id=<?php echo $producto['id_product']; ?>">Editar</a> | 
-                    <a href="eliminar_producto.php?id=<?php echo $producto['id_product']; ?>">Eliminar</a>
-                </div>
+<?php include 'tommic/header.php'; ?>
+<body class="bg-gray-100">
+    <div class="contenedor mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mt-10 text-gray-800 mb-6">Tus productos</h1>
+        <?php if (!empty($productos)): ?>
+            <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+                <ul class="divide-y divide-gray-200">
+                    <?php foreach ($productos as $producto): ?>
+                        <li class="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-orange-50 transition duration-150 ease-in-out">
+                            <div class="w-full md:w-auto mb-4 md:mb-0">
+                                <p class="text-lg text-orange-500 font-semibold"><strong>ID Producto:</strong> <?php echo $producto['id_product']; ?></p>
+                                <p class="text-lg font-semibold"><strong>Nombre Producto:</strong> <?php echo $producto['nombre_product']; ?></p>
+                                <p class="text-lg font-semibold"><strong>Precio Producto:</strong> <?php echo $producto['price_product']; ?></p>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="editar_producto.php?id=<?php echo $producto['id_product']; ?>" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-150 ease-in-out">Editar</a>
+                                <a href="eliminar_producto.php?id=<?php echo $producto['id_product']; ?>" class="inline-block bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-150 ease-in-out">Eliminar</a>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No hay productos disponibles.</p>
-    <?php endif; ?>
-
-    <p><a href="dashboard_mypime.php">Volver al Dashboard</a></p>
-    <p><a href="logout.php">Cerrar Sesión</a></p>
+        <?php else: ?>
+            <p class="text-center text-gray-600">No hay productos disponibles.</p>
+        <?php endif; ?>
+        <div class="text-center mt-4">
+            <a href="dashboard_mypime.php" class="text-blue-500 hover:text-blue-700 transition duration-150 ease-in-out">Volver al Dashboard</a>
+        </div>
+        <div class="text-center mt-2">
+            <a href="logout.php" class="text-gray-600 hover:text-gray-800 transition duration-150 ease-in-out">Cerrar Sesión</a>
+        </div>
+    </div>
 </body>
 </html>
