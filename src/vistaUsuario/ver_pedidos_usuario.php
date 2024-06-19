@@ -35,7 +35,7 @@ $result_pedidos = mysqli_query($conexion, $query_pedidos);
         <h2 class="text-center text-2xl mt-8 mb-4">Historial de Pedidos</h2>
         <div class="container mx-auto flex flex-wrap justify-center">
             <?php while ($pedido = mysqli_fetch_assoc($result_pedidos)) { ?>
-                <div class="card bg-white border border-gray-300 rounded-lg shadow-lg m-4 p-6 w-80 transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                <div class="bg-white border border-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg rounded-lg shadow-lg m-4 p-6 w-80 hover:scale-105">
                     <h3 class="text-lg font-semibold text-indigo-600">Fecha: <?php echo $pedido['placed_on']; ?></h3>
                     <p class="text-gray-600">Total: $<?php echo $pedido['total_price']; ?></p>
                     <?php

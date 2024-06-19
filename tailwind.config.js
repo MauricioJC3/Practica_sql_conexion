@@ -10,6 +10,8 @@ module.exports = {
         'iconu': 'url("../img/usuario.png")',
         'iconp': 'url("../img/contraseña.png")',
         'fondom': 'url("../img/fondomy.png")',
+        'hambu': 'url("../img/hambu.jpg")',
+        'haamm': 'url("../img/haamm.jpg")',
       },
     },
   },

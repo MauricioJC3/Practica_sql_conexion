@@ -5,6 +5,23 @@
 
 @layer components{
 
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Aplicar la animación a las tarjetas */
+    .card {
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+    }
+
     .imagen-producto-zoom:hover {
         @apply transform scale-110;
       }

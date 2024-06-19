@@ -43,6 +43,7 @@ if (isset($_GET['delete_all'])) {
 <body class="bg-gray-100">
 
    <?php include 'tommic/header.php'; ?>
+   
 
    <section class="shopping-cart mt-8">
 
