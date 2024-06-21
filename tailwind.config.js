@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{php,html,js}"],
-  theme: { 
+  theme: {
+    fontFamily: {
+      'bebas': ['Bebas Neue', 'sans-serif'],
+    },
     extend: {
       backgroundImage: {
         "close-menu": "url('../img/cerrar.png')",
@@ -13,8 +16,16 @@ module.exports = {
         'hambu': 'url("../img/hambu.jpg")',
         'haamm': 'url("../img/haamm.jpg")',
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        }
+      },
+      animation: {
+        fadeIn: 'fadeIn 1s ease-out forwards',
+      }
     },
   },
   plugins: [],
 }
-

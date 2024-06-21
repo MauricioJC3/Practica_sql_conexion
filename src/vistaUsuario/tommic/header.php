@@ -20,7 +20,7 @@
                         <a class="hover:text-gray-500" href="dashboard_cliente.php">Inicio</a>
                     </li>
                     <li>
-                        <a class="hover:text-gray-500" href="dashboard_cliente.php">Nosotros</a>
+                        <a class="hover:text-gray-500" href="nosotros.php">Nosotros</a>
                     </li>
                     <li>
                         <a class="hover:text-gray-500" href="ver_productos.php">Productos</a>

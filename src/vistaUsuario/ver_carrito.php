@@ -37,6 +37,9 @@ if (isset($_GET['delete_all'])) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Carrito</title>
    <link rel="stylesheet" href="../css/output.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
 </head>
 
@@ -47,7 +50,7 @@ if (isset($_GET['delete_all'])) {
 
    <section class="shopping-cart mt-8">
 
-      <h1 class="title text-2xl font-bold mb-4 justify-center text-center contenedor">Productos agregados</h1>
+      <h1 class="font-bebas title text-4xl font-bold mb-4 justify-center text-center contenedor">Productos agregados</h1>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto contenedor">
          <?php

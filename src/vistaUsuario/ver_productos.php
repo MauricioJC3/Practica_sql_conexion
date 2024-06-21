@@ -41,6 +41,9 @@ if (isset($_POST['add_to_cart']) && $user_id !== null) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Productos</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
    <link rel="stylesheet" href="../css/output.css">
 </head>
@@ -50,7 +53,7 @@ if (isset($_POST['add_to_cart']) && $user_id !== null) {
 <?php include 'tommic/header.php'; ?>
 
 <section class="contenedor">
-   <h1 class="title text-center mt-8 text-gray-700 font-bold">Productos</h1>
+   <h1 class="font-bebas text-4xl title text-center mt-8 text-amber-500 font-bold">Productos</h1>
 
    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center mt-8 m-5">
       <?php
